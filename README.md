@@ -2,7 +2,7 @@
 Welcome to my Github Profile! These are a few projects I have completed in the last couple of years!
 
 ## About Me ##
-I am a 3rd year Carnegie Mellon Student double majoring in Information Systems, and Statistics and Machine Learning
+I am a 3rd year Carnegie Mellon Student double majoring in Information Systems, and Statistics and Machine Learning. I will be graduating May 2026.
 
 ## Tech Stack ##
 - **Lanugages**: English (Native), Cantonese (Native), Mandarin (Fluent), Spanish (beginner)
