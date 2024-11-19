@@ -24,12 +24,12 @@ from PIL import Image
 import os, pathlib
 import random 
 
-playerDict = {"Russell Westbrook": {"image": "westbrook.png", "speed": 9, "strength": 6, "3pointer": 3, "midrange": 5, "layup": 8, "dribbling": 7, "steal": 6, "block": 4},
-              "Lebron James": {"image": "james.png", "speed": 8, "strength": 7, "3pointer": 5, "midrange": 6, "layup": 9, "dribbling": 7, "steal": 5, "block": 6},
-              "Kevin Durant": {"image": "durant.png", "speed": 7, "strength": 6, "3pointer": 8, "midrange": 9, "layup": 9, "dribbling": 7, "steal": 5, "block": 4},
-              "Stephen Curry ": {"image": "curry.png", "speed": 8, "strength": 4, "3pointer": 9, "midrange": 9, "layup": 9,  "dribbling": 9, "steal": 6, "block": 2},
-              "James Harden": {"image": "harden.png", "speed": 6, "strength": 5, "3pointer": 8, "midrange": 7, "layup": 9, "dribbling": 9, "steal": 6, "block": 2},
-              "Kawhi Leonard": {"image": "leonard.png", "speed": 6, "strength": 7, "3pointer": 8, "midrange": 9, "layup": 8, "dribbling": 5, "steal": 8, "block": 5}
+playerDict = {"Russell Westbrook": {"image": "StaticImages/westbrook.png", "speed": 9, "strength": 6, "3pointer": 3, "midrange": 5, "layup": 8, "dribbling": 7, "steal": 6, "block": 4},
+              "Lebron James": {"image": "StaticImages/james.png", "speed": 8, "strength": 7, "3pointer": 5, "midrange": 6, "layup": 9, "dribbling": 7, "steal": 5, "block": 6},
+              "Kevin Durant": {"image": "StaticImages/durant.png", "speed": 7, "strength": 6, "3pointer": 8, "midrange": 9, "layup": 9, "dribbling": 7, "steal": 5, "block": 4},
+              "Stephen Curry ": {"image": "StaticImages/curry.png", "speed": 8, "strength": 4, "3pointer": 9, "midrange": 9, "layup": 9,  "dribbling": 9, "steal": 6, "block": 2},
+              "James Harden": {"image": "StaticImages/harden.png", "speed": 6, "strength": 5, "3pointer": 8, "midrange": 7, "layup": 9, "dribbling": 9, "steal": 6, "block": 2},
+              "Kawhi Leonard": {"image": "StaticImages/leonard.png", "speed": 6, "strength": 7, "3pointer": 8, "midrange": 9, "layup": 8, "dribbling": 5, "steal": 8, "block": 5}
               }
 #------------------------------------------------------------------------------------------------------------------------------
 class Game:
@@ -655,7 +655,7 @@ def onGameStart(app):
     app.ball = Ball(app.ballX, app.ballY, app.user, app.comp, app)
 
     ###background
-    app.backg = Image.open(os.path.join(pathlib.Path(__file__).parent,"basketball-court.jpg"))      #basketball court 
+    app.backg = Image.open(os.path.join(pathlib.Path(__file__).parent,"StaticImages/basketball-court.jpg"))      #basketball court 
     app.backgW, app.backgH = app.backg.width/1.5, app.backg.height/1.5
     app.backg = CMUImage(app.backg)
     app.backgroundX = app.width//2
