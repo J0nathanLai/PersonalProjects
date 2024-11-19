@@ -1,0 +1,339 @@
+---
+title: Estimating New York City Household Income 
+author:
+- Jonathan Lai
+- jklai
+date: "Due Wed, October 26, at 11:59PM"
+output:
+  pdf_document:
+    toc: yes
+  word_document:
+    toc: yes
+  html_document:
+    code_folding: show
+    theme: cosmo
+    toc: yes
+    toc_float: yes
+optin: TRUE
+---
+
+```{r, include=FALSE}
+###########################
+# STYLE EDITS: IGNORE THIS
+###########################
+knitr::opts_chunk$set(message = FALSE) # include this if you don't want markdown to knit messages
+knitr::opts_chunk$set(warning = FALSE) # include this if you don't want markdown to knit warnings
+knitr::opts_chunk$set(echo = TRUE) # set echo=FALSE to hide code from html output
+```
+
+
+```{r}
+
+library("knitr")
+library("kableExtra")
+library("pander")
+library("readr")
+library("magrittr")
+library("car")
+library("interactions")
+library("leaps")
+
+```
+
+```{r, echo=FALSE}
+
+# TO BEGIN:
+# 
+# 1) Read the "project1-instructions" on Canvas:
+# https://canvas.cmu.edu/files/8638062/download?download_frd=1
+# 
+# 2) Load the packages by running the previous chunk.
+#
+# 3) To load the possible datasets, run the following:
+
+bikes <- readr::read_csv("bikes.csv")
+court <- readr::read_csv("court.csv")
+nyc <- readr::read_csv("nyc.csv")
+social <- readr::read_csv("social.csv")
+
+# 4) Read the corresponding data descriptions
+#    in the "data-story-prompts" on Canvas:
+# https://canvas.cmu.edu/courses/31373/files/folder/project1-materials/data-story-prompts
+
+
+```
+
+# Introduction
+New York City (NYC) is one of the biggest city in the world. Apart from its bustling lights, abundant skyscrapers, and being a cultural and financial center, NYC is also infamous for its expensive housing and rental prices. Living in NYC is expensive. So The New York City Housing and Vacancy Survey has surveyed the New York City population every 3 years to understand housing conditions and the households living in New York City. More specifically, we will focus on predicting the income of New York City households by using characteristics of New York residences that may potentially have an effect on household income. 
+
+\newpage 
+
+# Exploratory Data Analysis
+## Background Information
+In this dataset `nyc`, there are 299 samples collected from households in New York City. There are 4 variables, 3 potential predicting explanatory variables and 1 response variable `Income`. 
+
+Variable Descriptions:
+
+1. `Income` refers to the total household income (in dollars) of a NYC resident
+
+2. `Age` refers to the New York City household respondents' age (in years)
+
+3. `MaintenanceDef` refers to the number of maintenance deficiencies of the residence between 2002 and 2005 
+
+4. `NYCMove` refers to the year the New York City household respondent moved to NYC 
+
+To get an idea of what kind of data is in the dataset `nyc`, below are the first and last few samples in the dataset:
+```{r}
+head(nyc)
+tail(nyc)
+```
+The first data point describes a 77 year old NYC resident who had 1 maintenance deficiency in their residence between 2002 and 2005 and who moved in 1981 that has a household income of $8400.
+
+The last data point describes a 45 year old NYC resident who had 4 maintenance deficiency in their residence between 2002 and 2005 and who moved in 2004 that has a household income of $18000.
+\newpage
+
+## Univariate Analysis
+Below are the distributions of all the variables. 
+```{r}
+hist(nyc$Income,
+     main = "Distribution of NYC Household Income",
+     xlab = "Income ($)")
+summary(nyc$Income)
+
+```
+The distribution of the household income from the New York City respondents appears to be slightly skewed to the right, bimodal, with no outliers. The mean household income is $42266 but the median is smaller at $39000. The range household income is $96560 and the interquartile range is $36800. 
+\newpage
+```{r}
+hist(nyc$Age,
+     main = "Distribution of NYC Household Respondents' Age",
+     xlab = "Age (years)")
+summary(nyc$Age)
+```
+The distribution of the age of the New York City respondents appears to be very slightly skewed to the right, unimodal, with no outliers. The mean age of the NYC respondents is 50.03 years old and the median is close at 49 years old. The range age of the NYC respondents is 59 years old and the interquartile range is 16 years old. 
+\newpage
+```{r}
+hist(nyc$MaintenanceDef,
+     main = "Distribution of Number of Maintenance Deficiencies",
+     xlab = "Number of Maintenance Deficiencies")
+summary(nyc$MaintenanceDef)
+```
+The distribution of the number of maintenance deficiencies of the respondents' residence in New York City appears to be skewed to the right, unimodal, with no outliers. The mean number of maintenance deficiency is 1.98 and the median is slightly larger at 2 maintenance deficiencies. The range number of maintenance deficiency is 8 and the interquartile range is 1. 
+\newpage
+```{r}
+hist(nyc$NYCMove,
+     main = "Distribution of the Year NYC Respondents Moved to NYC",
+     xlab = "Year when Respondents Moved to NYC")
+summary(nyc$NYCMove)
+
+```
+
+The distribution of the year the New York City respondents moved to NYC appears to be skewed to the left, bimodal, with no outliers. The mean year when the NYC respondents moved to NYC is 1983 and the median is 1985. The range year when the NYC respondents moved to the city is 62 and the interquartile range is 22. 
+
+\newpage
+## Bivariate Analysis
+After analyzing the distribution of all the variables, we have to investigate which explanatory variables are most suitable to predict the `Income` (response variable) for creating a linear regression model. 
+
+### Variable Age
+```{r}
+plot(Income ~ Age, data = nyc,
+     main = "Household Income vs Age in NYC",
+     xlab = "Age (years)",
+     ylab = "Income ($)")
+agelm1 <- lm(Income~Age, data = nyc)
+plot(agelm1, which = 1)
+plot(agelm1, which = 2)
+summary(agelm1)
+```
+Since the scatterplot between response variable `Income` and explanatory variable `Age` appears to have a very weak correlation (or none at all), a residual mean that doesn't equal to 0, and a residual distribution that is not normally distributed, we can transform the variables involved in this scatterplot. The coefficient of determination is very low at 0.13%, meaning only 0.13% of the variability in the household income can be explained by the age of the respondents in NYC. 
+\newpage
+```{r}
+nyc$logIncome <- log(nyc$Income)
+nyc$logAge <- log(nyc$Age)
+plot(logIncome ~ logAge, data = nyc,
+     main = "Log of Income vs Log of Age in NYC",
+     xlab = "Log(Age)",
+     ylab = "Log(Income) ($)")
+agelm2 <- lm(logIncome ~ logAge, data = nyc)
+summary(agelm2)
+
+```
+\newpage
+Since the individual distribution of `Income` is skewed to the right, we used the logarithmic function to transform `Income` to be normally distributed. And also since the individual distribution of `Age` is skewed to the right, we transformed the variable using the logarithmic function too. However, despite producing a higher coefficient of determination value at 0.94%, using logarithmic transformation violates the normality error assumption based on the deviation in the QQ plot. A better transformation can be applied. 
+
+```{r}
+nyc$transIncome <- (nyc$Income)^(1/3)
+nyc$transAge <- (nyc$Age)^(1/5)
+plot(transIncome ~ transAge, data = nyc,
+     main = "Cube Root of Income vs 5th Root of Age in NYC",
+     xlab = "5th Root of Age",
+     ylab = "Cube Root of Income ($)")
+agelm3 <- lm(transIncome ~ transAge, data = nyc)
+plot(agelm3, which = 1)
+plot(agelm3, which = 2)
+summary(agelm3)
+```
+After transforming both the variables `Income` and `Age` with root functions, the model yields a larger coefficient of determination at 0.56% than the linear regression model without any transformation. This means that 0.56% of the variability in the cube root of household income can be explained by the 5th root of age of NYC respondents. This linear regression model also meets the error assumptions of having a constant sigma, a residual mean of roughly 0, a patternless residual plot that establishes independence, and data points that are close to the QQ plot line which establishes normality. 
+
+\newpage
+### Variable MaintenanceDef
+```{r}
+plot(Income ~ MaintenanceDef, data = nyc,
+     main = "Household Income vs Number of Maintenance Deficiencies in NYC",
+     xlab = "Number of Maintenance Deficiencies in NYC Residences",
+     ylab = "Income ($)")
+MainDeflm1 <- lm(Income ~ MaintenanceDef, data = nyc)
+plot(MainDeflm1, which = 1)
+plot(MainDeflm1, which = 2)
+summary(MainDeflm1)
+```
+Since the scatterplot between response variable `Income` and explanatory variable number of maintenance deficiencies of respondents' residences between 2002-2005 appears to have a non linear regression relationship, a residual distribution that is not normally distributed, we can transform the variables involved in this scatterplot. The coefficient of determination is 2.83%, meaning the 2.83% of variability in the household income can be explained by the number of maintenance deficiencies in NYC respondents' residences between years 2002 and 2005. 
+
+```{r}
+MainDefShift <- nyc$MaintenanceDef + 1.1
+nyc$logMainDef <- log(MainDefShift)
+plot(transIncome ~ logMainDef, data = nyc,
+     main = "Cube Root of Income vs Log of the Number of Maintenance 
+     Deficiencies in NYC",
+     xlab = "Log of the Number of Maintenance Deficiency shifted",
+     ylab = "Cube Root of Income ($)")
+MainDeflm2 <- lm(transIncome ~ logMainDef, data = nyc)
+summary(MainDeflm2)
+```
+Due to the skewness to the right of the individual distribution of `Income`, we used the cube root transformation again. And we used the logarithmic function for transformation on the variable number of maintenance deficiencies to establish normality. It has a higher coefficient of determination at 2.60%, meaning 2.60% of the variability in the household income can be explained by the log of the number of maintenance deficiencies in the NYC respondents' household between 2002 and 2005. The residual mean is roughly 0, normality can be established based on the QQ plot, independence can also be established because the residual plot is somewhat patternless, and it has a constant spread. However, a better model can be implemented. 
+```{r}
+plot(logIncome ~ MaintenanceDef, data = nyc,
+     main = "Log of Income vs Number of Maintenance Deficiencies in NYC",
+     xlab = "Number of Maintenance Deficiencies",
+     ylab = "Log of Income ($)")
+MainDeflm3 <- lm(logIncome ~ MaintenanceDef, data = nyc)
+summary(MainDeflm3)
+```
+\newpage
+Due to the skewness to the right of the individual distribution of `Income`, we used the logarithmic transformation for `Income`. It has a higher coefficient of determination at 5.81%, meaning 5.81% of the variability in the log of household income can be explained by the number of maintenance deficiencies in the NYC respondents' household between 2002 and 2005. Despite having a higher coefficient of determination, normality cannot be established as the data points deviate from the QQ plot line too much. 
+
+```{r}
+plot(transIncome ~ MaintenanceDef, data = nyc,
+     main = "Cube Root of Income vs Number of Maintenance Deficiencies in NYC",
+     xlab = "Number of Maintenance Deficiencies",
+     ylab = "Cube Root of Income ($)")
+MainDeflm4 <- lm(transIncome ~ MaintenanceDef, data = nyc)
+plot(MainDeflm4, which = 1)
+plot(MainDeflm4, which = 2)
+summary(MainDeflm4)
+```
+After transforming only variable `Income` with a root function, the model yields a larger coefficient of determination at 4.21% than the orginal linear regression model without any transformation. This means that 4.21% of the variability in the cube root of household income can be explained by the number of maintenance deficiencies in NYC respondents' households between 2002 and 2005. This linear regression model also meets the error assumptions of having a constant sigma, a residual mean of roughly 0, a patternless residual plot that establishes independence, and data points that are close to the QQ plot line that establishes normality. While exploring the bivariate relationship between `Income` and the number of maintenance deficiency in NYC respondents' households between 2002 and 2005, the root function wasn't used on the number of maintenance deficiency because the logarithmic transformation creates a better coefficient of determination value overall. 
+
+\newpage
+### Variable NYCMove
+```{r}
+plot(Income ~ NYCMove, data = nyc,
+     main = "Household Income vs the Year Respondents Moved to NYC",
+     xlab = "Year Respondents Moved to NYC",
+     ylab = "Household Income ($)")
+NYCMovelm1 <- lm(Income ~ NYCMove, data = nyc)
+plot(NYCMovelm1, which = 1)
+plot(NYCMovelm1, which = 2)
+summary(NYCMovelm1)
+```
+Since the scatterplot between response variable `Income` and explanatory variable year respondents moved to NYC appears to have a very weak correlation (or none at all), a residual mean that doesn't equal to 0, and a residual distribution that is not normally distributed, we can transform the variables involved in this scatterplot. The coefficient of determination is low at 1.02%, meaning only 1.02% of the variability in the household income can be explained by the year respondents moved to NYC.  
+
+```{r}
+nyc$transNYCMove <- (nyc$NYCMove)^(-1/4)
+plot(transIncome ~ transNYCMove, data = nyc,
+     main = "Cube Root of Income vs Inverse 4th Root of Year Respondents 
+     Moved to NYC",
+     xlab = "Inverse 4th Root of Year Respondents Moved",
+     ylab = "Cube Root of Income ($)")
+NYCMovelm2 <- lm(transIncome ~ transNYCMove, data = nyc)
+summary(NYCMovelm2)
+
+```
+Since the individual distribution of `Income` is skewed to the right, we used the root function to transform `Income` to be normally distributed. And also since the individual distribution of the year respondents moved to NYC is skewed to the left, we transformed the variable by using a inverse root function. The coefficient of determination value is 1.21%, meaning 1.21% of the variability in the cube root of `Income` can be explained by the inverse 4th root of the year when the respondents moved to NYC.
+```{r}
+plot(transIncome ~ NYCMove, data = nyc,
+     main = "Cube Root of Income vs Year Respondent Moved to NYC",
+     xlab = "Year Respondent Moved to NYC",
+     ylab = "Cube Root of Income ($)")
+NYCMovelm3 <- lm(transIncome ~ NYCMove, data = nyc)
+plot(NYCMovelm3, which = 1)
+plot(NYCMovelm3, which = 2)
+summary(NYCMovelm3)
+```
+After transforming only variable `Income` with a root function, the model yields a similar coefficient of determination at 1.24% than the linear regression model with the cube root of `Income` and inverse 4th root of the year the respondents moved to NYC. This means that 1.24% of the variability in the cube root of household income can be explained by the year the NYC respondents moved to NYC. So we should choose the untransformed version of the variable the year respondents moved to NYC to keep the model simple. This linear regression model also meets most of the error assumptions of having a constant sigma, a patternless residual plot that establishes independence, and data points that are close to the QQ plot line that establishes normality. If we were to use a pure root or logarithmic function to transform the variable the year the respondents moved to NYC, the distribution of the variable the year the respondents moved to NYC would be even more skewed. If we were to use an exponential function after shifting the variable the year respondents moved to NYC (to reduce the numeric value size of the year respondents moved to NYC), the distribution of that variable will become skewed to the right. So keeping the variable `NYCMove`, the year respondents moved to NYC, unchanged will be the best. 
+
+
+Overall, all four variables are not distributed normally. When the 3 explanatory variables are compared to the household income, the scatter plots show very weak linear relationships and even non linear relationships. Since the relationship between `Income` and `Age` is very weak, the direction (positive or negative) of the relationship cannot be determined; In the non-linear relationship between `Income` and the number of maintenance deficiencies, the high number of maintenance deficiencies tend to occur in lower-income households, but a low number of maintenance deficiency occurs in high-income and low-income households; despite the very weak relationship betwen `Income` and the year respondents moved to NYC, the direction seems to be slightly positive. 
+\newpage
+
+# Modeling 
+To determine which explanatory variables to use in the final linear regression model for predicting household income, the below correlation matrix shows the correlation values. 
+```{r}
+nyc.ordered <- subset(nyc, select = c(Income, logIncome, transIncome, Age, logAge, transAge, MaintenanceDef, logMainDef, NYCMove, transNYCMove))
+round(cor(nyc.ordered), digits = 2)
+```
+Looking across the 3 household income variables, not transforming the `Income` variable yields to lowest correlation overall. But although using the logarithmic transformation for the `Income` variable may yield the highest correlation coefficients, many of the  models that used the log of `Income` led to violations of the normality error assumption. So we should use the variable labled `transIncome`, which is the cube root of the household income, as the response variable for the final  model. 
+
+Across the response variable the cube root of household income of NYC respondents, the log of `Age` (labled `logAge`) has the highest correlation among all the `Age` explanatory variables, but it violates the normality assumption. So we will use the transformed version of variable `Age` which is the 5th root; the original number of Maintenance Deficiency (labled `MaintenanceDef`) has the highest correlation among all the `Maintenance Deficiency` explanatory variables; the original year the respondents moved to NYC (labled `NYCMove`) has the highest correlation among the 2 explanatory variables that describe the year respondents moved to NYC. 
+
+So the chosen variables are the cube root of `Income`, the 5th root of `Age`, the original number of `Maintenance Deficiencies` in NYC residences between the years 2002 and 2005, and the original year the respondents moved to NYC. 
+
+Below is the pairs plot of the selected variables to illustrate the relationship between all 4 variables concisely. 
+```{r}
+nyc.transformed <- subset(nyc, select = c(transIncome, transAge, MaintenanceDef, NYCMove))
+pairs(nyc.transformed)
+```
+
+## Dangerous Multicollinearity
+Based on the pairs plot, the correlation between the 3 explanatory variables doesn't seem to be strong. But to make sure that the data with the selected variables doesn't have dangerous multicollinearity, the vif value must be checked. 
+```{r}
+nyclm <- lm(transIncome ~ transAge + MaintenanceDef + NYCMove, data = nyc)
+car::vif(nyclm)
+```
+The above vif values do not exceed the 2.5 value, meaning there is not a sign for dangerous multicollinearity and we should not be concerned between the relationships between the 3 explanatory variables. 
+
+## Constructing the Final Linear Regression Model for Estimating Household Income
+```{r}
+best.nyc.subset <- regsubsets(transIncome ~. , data = nyc.transformed, nvmax = 4)
+summary(best.nyc.subset)
+```
+```{r}
+nyclm3 <- lm(transIncome ~ transAge + MaintenanceDef + NYCMove, data = nyc)
+summary(nyclm3)
+```
+If we were to use all 3 explanatory variables, the coefficient of determination would be 4.28%, meaning 4.28% of the variability in the cube root of household income can be explained by the 5th root of `Age`, the number of maintenance deficiencies in the NYC residences between 2002 and 2005, and the year the respondents moved to NYC. But since the p-value of the 5th root of `Age` and the year the respondents moved to NYC is greater than any reasonable significance level, we cannot reject the null hypothesis, meaning there is not significant evidence that suggests a relationship between the 5th root of `Age` and the cube root of household income and there is not a relationship between the year respondents moved to NYC and the cube root of household income. So a better linear regression model should be created. 
+
+```{r}
+nyclm2 <- lm(transIncome ~ transAge + MaintenanceDef, data = nyc)
+summary(nyclm2)
+```
+If we were to use 2 explanatory variables (the 5th root of `Age` and the number of maintenance deficiencies), the coefficient of determination would be 4.28%, meaning 4.28% of the variability in the cube root of household income can be explained by the 5th root of `Age` and the number of maintenance deficiencies in the NYC residences between 2002 and 2005. But since the p-value of the 5th root of `Age` is greater than any reasonable significance level, we cannot reject the null hypothesis, meaning there is not significance evidence that suggests a relationship between the 5th root of `Age` and the cube root of household income. So a better linear regression model can be used to predict household income of NYC residents. 
+
+```{r}
+plot(transIncome ~ MaintenanceDef, data = nyc)
+nyclm1 <- lm(transIncome ~ MaintenanceDef, data = nyc)
+plot(nyclm1, which = 1)
+plot(nyclm1, which = 2)
+summary(nyclm1)
+```
+If we use only one explanatory variable, the number of maintenance deficiencies in the NYC residences between 2002 and 2005, the coefficient of determination value is not too much smaller than the linear regression models that used more explanatory variables. The coefficient of determination value is similar at 4.21%, meaning 4.21% of the variability in the cube root of household income can be explained by the number of maintenance deficiencies in the NYC residences between 2002 and 2005. The p-value is smaller than a 5% significance level, so we can reject the null hypothesis. This means that there is sufficient evidence that suggests a relationship between the number of maintenance deficiencies and the cube root of household income of NYC residents. 
+
+So the final regression model is $$Income = (\beta_0 + \beta_1(MaintenanceDef))^3 + error$$. 
+Or the cube root of Income is equal to $$(\beta_0 + \beta_1(MaintenanceDef)) + error$$
+\newpage
+
+# Prediction 
+
+The predicted Income  is equal to (35.1946 -0.9120(MaintenanceDef))^3
+
+If a client is interest in predicting income for a household with 3 maintenance deficiencies, whose respondent's age is 53 and who moved to NYC in 1987. 
+
+predicted Income = (35.1946 -0.9120*(3))^3 =
+```{r}
+(35.1946 -0.9120*(3))^3 
+```
+So we predict that a household with 3 maintenance deficiencies in their residence, whose respondent's age is 53 and who moved to NYC in 1987, would have a household income of $34197.11 or have the cube root of household income of $32.46. 
+
+# Discussion
+While we may have some idea of what a New York City resident's household income is given the number of maintenance deficiencies at their residence, it is important to acknowledge that the this regression model is not reliable because of its low coefficient of determination value. Despite having the highest coefficient of determination among all the other regression models that was tried, only 4.21% of the variability in the log of household income can be explained by the number of maintenance deficiency in the residence, which is extremely low. And even though it meets all the error assumptions of having a residual mean of roughly 0, a constant spread, patternless residual plot, and data points close to the QQ plot line, the model's linear relationship is still very weak. 
+
+Further more, a higher-order regression line may be more appropriate for predicting the household income of the NYC residents based on their age, the number of maintenance deficiencies in their residences between 2002 and 2005, and the year they moved to NYC. To improve our prediction of NYC residents' household income, we could, firstly, use more recent data to present data that is more current, and, secondly, use other explanatory variables, like years of education, birth place (categorical variable that explores whether respondents are born in the US or not), monthly rent amount for current residences, etc. So there, certainly, is a way to further improve the current linear regression model to predict NYC residents' household income. 
