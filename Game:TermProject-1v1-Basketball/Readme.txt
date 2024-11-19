@@ -8,10 +8,10 @@ This term project is a 1v1 basketball game involving NBA players with realistic 
 
 
 How to run the project and other modules and libraries:
-In the zip file, there will be a bunch of images for the project and the code in a .py file type. To set up, download cmu_graphics from this website https://academy.cs.cmu.edu/desktop. Make sure you place the images and the cmu_graphics folder from the dowloa in the same location as your code file on your computer (e.g. if you placed the code file on your desktop, make sure you place the images and the cmu_graphics folder on your desktop too). Then, at the beginning of the code file, ensure you have the line “from cmu_graphics import *”. 
+In the StaticImages folder, there will be a bunch of images for the project. To set up, download cmu_graphics from this website https://academy.cs.cmu.edu/desktop. Make sure you place the cmu_graphics folder from the download in the same location as your code file (BasketballGameCode.py) on your computer (e.g. if you placed the code file on your desktop, make sure you place the cmu_graphics folder on your desktop too). Then, at the beginning of the code file, ensure you have the line “from cmu_graphics import *”. 
 
 
-To access the images in the zip file and import it into the code, first import the module image from the library PIL by writing “from PIL import image” after the cmu_graphics import line. Then also import the modules os, and pathlib by writing “import os, pathlib”. Then, to open the images, we use the line “Image.open(os.path.join(pathlib.Path(__file__).parent,{filename}))” and put the image’s file name in the curly brackets. Lastly, since we are using cmu_graphics, we have to convert the image into a CMU image by using “CMUImage({image_varaible_name})”. 
+To access the images and import it into the code, first import the module image from the library PIL by writing “from PIL import image” after the cmu_graphics import line. Then also import the modules os, and pathlib by writing “import os, pathlib”. Then, to open the images, we use the line “Image.open(os.path.join(pathlib.Path(__file__).parent,{filename}))” and put the image’s file name in the curly brackets. Lastly, since we are using cmu_graphics, we have to convert the image into a CMU image by using “CMUImage({image_varaible_name})”. 
 
 
 Lastly, “import random” for the probabilities used in calculating the probability of success of the players’ moves. 
