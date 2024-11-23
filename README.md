@@ -13,6 +13,15 @@ I am a 3rd year Carnegie Mellon Student double majoring in Information Systems, 
 - [email] laijonathankl@gmail.com
 - [linkedin] https://www.linkedin.com/in/jonathan-lai-cmu/
 
+## Projects ##
+- Checkout the [Game:TermProject-1v1-Basketball](./Game:TermProject-1v1-Basketball/Readme.txt) for a basketball game I made that lets you play against a simple AI opponent. 
+- Checkout the [Linear-Regression-Report:NYC-housing](./Linear-Regression-Report:NYC-Housing/202project1%20Jonathan%20Lai%20NYC%20Housing.pdf) for a report on how the best linear regression model with different predictors can predict household income in NYC. 
+- Checkout the [Machine-Learning-Report:Classifying-Room-Occupancy](./Machine-Learning-Report:Classifying-Room-Occupancy/202project2%20Jonathan%20Lai%20Occupancy.pdf) for a report on the best Machine Learning model to predict a room's occupancy. 
+- Checkout the [Machine-Learning:Restaurant-Review-NLP](./Machine-Learning:Restaurant-Review-NLP/lr.py) for the implementation of a binary logistic regression model (ML model) on predicting whether a restaurant review is positive or negative using data from Yelp, the website with crowd-sourced reviews on different businesses. 
+- Checkout the [Machine-Learning:RNN-Large-Language-Model](./Machine-Learning:RNN-Large-Language-Model/rnn.py) for the implementation of a recurrent neural network large language model (ML model) that generates words and sentences given a prompt.
+- Checkout the [Software-Engineering:Updated-NodeBB-Forum](./Software-Engineering:Updated-NodeBB-Forum/Readme.txt) for a new repository with a new implementation of the NodeBB Forum platform.
+- Checkout the [Web-Development:Say-It-With-Sweets-Website](./Web-Development:Say-It-With-Sweets-Website/Readme.txt) for a repository with the source code of a local sweet shop's website. 
+
 Please Enjoy My Projects!
 
 
