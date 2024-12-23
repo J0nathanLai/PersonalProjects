@@ -1,0 +1,13 @@
+Server_id, User_id, Date_joined, Can_chat, Can_voice
+0, 0, Mon Sep 30 2024 02:29:58, True, True
+0, 1, Tue Dec 1 2024 10:29:45, True, True 
+1, 1, Wed Dec 2 2024 10:28:00, True, False
+2, 0, Sep 28 2024 02:31:34, True, False
+2, 1, Sep 28 2024 05:15:00, True, False
+2, 2, Sep 15 2024 09:00:00, True, True
+2, 3, Sep 15 2024 09:02:00, True, True
+2, 4, Sep 16 2024 12:00:00, True, True
+1, 5, May 20 2024 03:00:31, True, True
+1, 2, May 23 2024 04:00:00, True, True
+0, 6, May 23 2024 04:00:00, True, True
+2, 6, May 23 2024 04:00:00, True, False

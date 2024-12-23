@@ -1,0 +1,7 @@
+Message_id, Message, Time_sent, Sender_id
+0, 'welcome to class', Tue Aug 20 2024 05:55:55, 2
+1, 'quack', Aug 23 2024 12:01:11, 1
+2, 'lets work on phase 2 tmrw', Dec 01 2024 02:01:01, 0
+3, 'quack', Dec 20 2024 11:11:11, 5
+4, 'im dropping this class', Dec 20 2024 11:11:12, 6
+5, ':D', Dec 20 2024 11:12:20, 6

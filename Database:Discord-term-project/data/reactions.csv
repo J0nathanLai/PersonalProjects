@@ -1,0 +1,5 @@
+Reaction_id, Reaction_emoji, Time_added, Message_id, User_id
+0, 'duck', Aug 24 2024 01:00:00, 1, 2
+1, 'happy', Dec 02 2024 12:12:12, 0, 0
+2, 'happy', Dec 02 2024 12:12:13, 0, 1
+3, 'sad', Dec 02 2024 12:12:14, 0, 6

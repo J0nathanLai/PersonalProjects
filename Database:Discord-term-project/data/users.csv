@@ -1,0 +1,8 @@
+User_id, Username, Status, Status_message, Email, Age, Pronouns
+0, 'jklai',offline, 'Hello everybody', 'laijonathankl@gmail.com', 20, 'He/Him'
+1, 'alicia',dnd, 'Hi', 'alicia@gmail.com', 20, 'She/Her'
+2, 'sraja',away, 'use pomodoro method', 'raja@cmu.edu', 99, 'He/Him'
+3, 'xiaoying',online, 'mongodb!', 'xiaoying@cmu.edu', 99, 'He/Him'
+4, 'bob3',online, 'hello', 'bobb@gmail.com', 34, 'He/Him'
+5, 'carol',away, ':D', 'carolbells@yahoo.com', 20, 'She/Her'
+6, 'tobedeleted',away, 'eee', 'uhoh@uhoh.uhoh', 16, 'She/Her'

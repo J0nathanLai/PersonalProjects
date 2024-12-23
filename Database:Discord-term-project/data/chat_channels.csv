@@ -1,0 +1,4 @@
+Chat_channel_id, Channel_name, Server_id
+1, 'ducks', 1
+2, 'announcements', 2
+3, 'faqs', 2
