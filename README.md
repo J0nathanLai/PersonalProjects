@@ -20,6 +20,7 @@ I am a 3rd year Carnegie Mellon Student double majoring in Information Systems, 
 - Check out the [Machine-Learning:Restaurant-Review-NLP](./Machine-Learning:Restaurant-Review-NLP/lr.py) for the implementation of a binary logistic regression model (ML model) on predicting whether a restaurant review is positive or negative using data from Yelp, the website with crowd-sourced reviews on different businesses. 
 - Check out the [Machine-Learning:RNN-Large-Language-Model](./Machine-Learning:RNN-Large-Language-Model/rnn.py) for the implementation of a recurrent neural network large language model (ML model) that generates words and sentences given a prompt.
 - Check out the [Software-Engineering:Updated-NodeBB-Forum](./Software-Engineering:Updated-NodeBB-Forum/Readme.txt) for a new repository with a new implementation of the NodeBB Forum platform.
+- Check out the [Software-Engineering:Oppia-Open-Source-Contribution](./Software-Engineering:Oppia-Open-Source-Contribution/Readme.txt) for the pull requests that fixes an issue on the Oppia Open Source project.
 - Check out the [Web-Development:Say-It-With-Sweets-Website](./Web-Development:Say-It-With-Sweets-Website/Readme.txt) for a repository with the source code of a local sweet shop's website. 
 
 Please Enjoy My Projects!
