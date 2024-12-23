@@ -14,6 +14,7 @@ I am a 3rd year Carnegie Mellon Student double majoring in Information Systems, 
 - [linkedin] https://www.linkedin.com/in/jonathan-lai-cmu/
 
 ## Projects ##
+- Check out the [Database:Discord-term-project](./Database:Discord-term-project/phase2FinalDeliverable.pdf) for a mock Database that mimics the Discord app's structure and simulates user interactions to satisfy user stories. 
 - Check out the [Game:TermProject-1v1-Basketball](./Game:TermProject-1v1-Basketball/Readme.txt) for a basketball game I made that lets you play against a simple AI opponent. 
 - Check out the [Linear-Regression-Report:NYC-housing](./Linear-Regression-Report:NYC-Housing/202project1%20Jonathan%20Lai%20NYC%20Housing.pdf) for a report on how the best linear regression model with different predictors can predict household income in NYC. 
 - Check out the [Machine-Learning-Report:Classifying-Room-Occupancy](./Machine-Learning-Report:Classifying-Room-Occupancy/202project2%20Jonathan%20Lai%20Occupancy.pdf) for a report on the best Machine Learning model to predict a room's occupancy. 
